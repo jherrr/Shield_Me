@@ -60,6 +60,9 @@ var Asteroids = (function () {
     that.update = function () {
       that.x += that.vel.x;
       that.y += that.vel.y;
+
+      that.x = Math.max(0, Math.min(Game.DIM_X, that.x));
+      that.y = Math.max(0, Math.min(Game.DIM_Y, that.y));
     };
 
     that.isCollided = function (asteroid) {
