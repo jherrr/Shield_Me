@@ -113,6 +113,13 @@ var Asteroids = (function () {
       if (outOfBounds(that.x, that.y, Game.DIM_X, Game.DIM_Y)) {
         game.bullets = _.without(game.bullets, that);
       }
+
+      game.asteroids = _.filter(game.asteroids, function (asteroid) {
+        return !isCollision(
+          that.x, that.y, Bullet.RADIUS,
+          asteroid.x, asteroid.y, Asteroid.RADIUS
+        );
+      });
     }
 
     that.draw = function (ctx) {
