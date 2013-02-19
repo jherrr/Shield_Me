@@ -3,6 +3,16 @@ var Asteroids = (function () {
     return (x < 0) || (y < 0) || (x > dimX) || (y > dimY);
   }
 
+  function isCollision(
+    x1, y1, r1,
+    x2, y2, r2) {
+    var dist = Math.sqrt(
+      Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2)
+    );
+
+    return dist < (r1 + r2);
+  }
+
   function Asteroid (startX, startY, vel, game) {
     var that = this;
 
@@ -82,11 +92,9 @@ var Asteroids = (function () {
     };
 
     that.isCollided = function (asteroid) {
-      var dist = Math.sqrt(
-        Math.pow((that.x - asteroid.x), 2) +
-          Math.pow((that.y - asteroid.y), 2));
-
-      return (dist - (Ship.RADIUS + Asteroid.RADIUS)) < 0;
+      return isCollision(
+        that.x, that.y, Ship.RADIUS,
+        asteroid.x, asteroid.y, Asteroid.RADIUS);
     };
   }
 
