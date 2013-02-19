@@ -58,9 +58,20 @@ var Asteroids = (function () {
     }
 
     that.fireBullet = function () {
-      game.bullets.push(
-        new Bullet(that.x, that.y, { x: 0, y: -1 })
-      );
+      var norm = Math.sqrt(
+        Math.pow(that.vel.x, 2) +
+          Math.pow(that.vel.y, 2));
+
+      if (norm == 0)
+        // can't fire moving still
+        return;
+
+      var dir = { x: that.vel.x / norm, y: that.vel.y / norm };
+
+      console.log(norm);
+      console.log(dir);
+
+      game.bullets.push(new Bullet(that.x, that.y, dir));
     }
 
     that.update = function () {
