@@ -106,10 +106,21 @@ var Asteroids = (function () {
     }
 
     that.bindKeyHandlers = function () {
-      key("up",    function () { that.ship.power(0 , -1); });
-      key("down",  function () { that.ship.power(0 ,  1); });
-      key("left",  function () { that.ship.power(-1,  0); });
-      key("right", function () { that.ship.power( 1,  0); });
+      var moves = {
+        "q": [-1, -1],
+        "w": [ 0, -1],
+        "e": [ 1, -1],
+        "a": [-1,  0],
+        "s": [ 0,  0],
+        "d": [ 1,  0],
+        "z": [-1,  1],
+        "x": [ 0,  1],
+        "c": [ 1,  1]
+      }
+
+      _.each(moves, function (v, k) {
+        key(k, function () { that.ship.power(v[0], v[1]) });
+      });
     }
 
     that.draw = function () {
