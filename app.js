@@ -36,7 +36,7 @@ var Asteroids = (function () {
     );
   };
 
-  function Ship (startX, startY) {
+  function Ship (startX, startY, game) {
     var that = this;
 
     that.x = startX;
@@ -45,7 +45,7 @@ var Asteroids = (function () {
     that.vel = { x: 0, y: 0 };
 
     that.draw = function (ctx) {
-      ctx.fillStyle = "#F00"
+      ctx.fillStyle = "#00F"
 
       ctx.beginPath();
       ctx.arc(that.x, that.y, Ship.RADIUS, 0, 2 * Math.PI, true);
@@ -55,6 +55,12 @@ var Asteroids = (function () {
     that.power = function (dx, dy) {
       that.vel.x += dx;
       that.vel.y += dy;
+    }
+
+    that.fireBullet = function () {
+      game.bullets.push(
+        new Bullet(that.x, that.y, { x: 0, y: -1 })
+      );
     }
 
     that.update = function () {
@@ -76,15 +82,39 @@ var Asteroids = (function () {
 
   Ship.RADIUS = 15;
 
+  function Bullet (startX, startY, dir) {
+    var that = this;
+
+    that.x = startX;
+    that.y = startY;
+
+    that.update = function () {
+      that.x += dir.x * Bullet.SPEED;
+      that.y += dir.y * Bullet.SPEED;
+    }
+
+    that.draw = function (ctx) {
+      ctx.fillStyle = "#F00";
+
+      ctx.beginPath();
+      ctx.arc(that.x, that.y, Bullet.RADIUS, 0, 2 * Math.PI, true);
+      ctx.fill();
+    }
+  }
+
+  Bullet.RADIUS = 2;
+  Bullet.SPEED = 15;
+
   function Game (ctx) {
     var that = this;
 
     that.timerId = null;
 
-    that.ship = new Ship(Game.DIM_X / 2, Game.DIM_Y / 2);
+    that.ship = new Ship(Game.DIM_X / 2, Game.DIM_Y / 2, that);
     that.asteroids = _.times(10, function () {
       return Asteroid.randomAsteroid(Game.DIM_X, Game.DIM_Y, Asteroid.SPEED);
     });
+    that.bullets = [];
 
     that.checkCollisions = function () {
       _.each(that.asteroids, function (asteroid) {
@@ -100,6 +130,10 @@ var Asteroids = (function () {
 
       _.each(that.asteroids, function (asteroid) {
         asteroid.update();
+      });
+
+      _.each(that.bullets, function (bullet) {
+        bullet.update();
       });
 
       // remove off-screen asteroids
@@ -124,6 +158,8 @@ var Asteroids = (function () {
       _.each(moves, function (v, k) {
         key(k, function () { that.ship.power(v[0], v[1]) });
       });
+
+      key("space", function () { that.ship.fireBullet() });
     }
 
     that.draw = function () {
@@ -133,6 +169,9 @@ var Asteroids = (function () {
 
       _.each(that.asteroids, function (asteroid) {
         asteroid.draw(ctx);
+      });
+      _.each(that.bullets, function (bullet) {
+        bullet.draw(ctx);
       });
    };
 
