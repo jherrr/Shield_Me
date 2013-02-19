@@ -1,5 +1,5 @@
 var Asteroids = (function () {
-  function Asteroid (startX, startY, vel) {
+  function Asteroid (startX, startY, vel, game) {
     var that = this;
 
     that.x = startX;
@@ -16,6 +16,11 @@ var Asteroids = (function () {
     that.update = function () {
       that.x += vel.x;
       that.y += vel.y;
+
+      if (that.outOfBounds(Game.DIM_X, Game.DIM_Y)) {
+        game.asteroids =
+          _.without(game.asteroids, that);
+      }
     }
 
     that.outOfBounds = function (dimX, dimY) {
@@ -28,11 +33,12 @@ var Asteroids = (function () {
 
   Asteroid.RADIUS = 25;
   Asteroid.SPEED = 4;
-  Asteroid.randomAsteroid = function (dimX, dimY, speed) {
+  Asteroid.randomAsteroid = function (dimX, dimY, speed, game) {
     return new Asteroid(
       dimX * Math.random(),
       dimY * Math.random(),
-      { x: speed * Math.random(), y: speed * Math.random() }
+      { x: speed * Math.random(), y: speed * Math.random() },
+      game
     );
   };
 
@@ -67,10 +73,6 @@ var Asteroids = (function () {
         return;
 
       var dir = { x: that.vel.x / norm, y: that.vel.y / norm };
-
-      console.log(norm);
-      console.log(dir);
-
       game.bullets.push(new Bullet(that.x, that.y, dir));
     }
 
@@ -123,7 +125,12 @@ var Asteroids = (function () {
 
     that.ship = new Ship(Game.DIM_X / 2, Game.DIM_Y / 2, that);
     that.asteroids = _.times(10, function () {
-      return Asteroid.randomAsteroid(Game.DIM_X, Game.DIM_Y, Asteroid.SPEED);
+      return Asteroid.randomAsteroid(
+        Game.DIM_X,
+        Game.DIM_Y,
+        Asteroid.SPEED,
+        that
+      );
     });
     that.bullets = [];
 
@@ -145,11 +152,6 @@ var Asteroids = (function () {
 
       _.each(that.bullets, function (bullet) {
         bullet.update();
-      });
-
-      // remove off-screen asteroids
-      that.asteroids = _.filter(that.asteroids, function (asteroid) {
-        return !asteroid.outOfBounds(Game.DIM_X, Game.DIM_Y);
       });
     }
 
