@@ -27,6 +27,7 @@ var Asteroids = (function () {
   }
 
   Asteroid.RADIUS = 25;
+  Asteroid.SPEED = 4;
   Asteroid.randomAsteroid = function (dimX, dimY, speed) {
     return new Asteroid(
       dimX * Math.random(),
@@ -51,6 +52,11 @@ var Asteroids = (function () {
       ctx.fill();
     };
 
+    that.power = function (dx, dy) {
+      that.vel.x += dx;
+      that.vel.y += dy;
+    }
+
     that.update = function () {
       that.x += that.vel.x;
       that.y += that.vel.y;
@@ -74,7 +80,7 @@ var Asteroids = (function () {
 
     that.ship = new Ship(Game.DIM_X / 2, Game.DIM_Y / 2);
     that.asteroids = _.times(10, function () {
-      return Asteroid.randomAsteroid(Game.DIM_X, Game.DIM_Y, 10);
+      return Asteroid.randomAsteroid(Game.DIM_X, Game.DIM_Y, Asteroid.SPEED);
     });
 
     that.checkCollisions = function () {
@@ -99,6 +105,13 @@ var Asteroids = (function () {
       });
     }
 
+    that.bindKeyHandlers = function () {
+      key("up",    function () { that.ship.power(0 , -1); });
+      key("down",  function () { that.ship.power(0 ,  1); });
+      key("left",  function () { that.ship.power(-1,  0); });
+      key("right", function () { that.ship.power( 1,  0); });
+    }
+
     that.draw = function () {
       ctx.clearRect(0, 0, Game.DIM_X, Game.DIM_Y);
 
@@ -107,10 +120,11 @@ var Asteroids = (function () {
       _.each(that.asteroids, function (asteroid) {
         asteroid.draw(ctx);
       });
-    };
+   };
 
     FPS = 32;
     that.start = function () {
+      that.bindKeyHandlers();
       that.timerId = setInterval(function () {
         that.update();
         that.draw();
