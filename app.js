@@ -1,4 +1,8 @@
 var Asteroids = (function () {
+  function outOfBounds(x, y, dimX, dimY) {
+    return (x < 0) || (y < 0) || (x > dimX) || (y > dimY);
+  }
+
   function Asteroid (startX, startY, vel, game) {
     var that = this;
 
@@ -17,17 +21,10 @@ var Asteroids = (function () {
       that.x += vel.x;
       that.y += vel.y;
 
-      if (that.outOfBounds(Game.DIM_X, Game.DIM_Y)) {
+      if (outOfBounds(that.x, that.y, Game.DIM_X, Game.DIM_Y)) {
         game.asteroids =
           _.without(game.asteroids, that);
       }
-    }
-
-    that.outOfBounds = function (dimX, dimY) {
-      return (that.x < 0)
-        || (that.y < 0)
-        || (that.x > dimX)
-        || (that.y > dimY);
     }
   }
 
@@ -73,7 +70,7 @@ var Asteroids = (function () {
         return;
 
       var dir = { x: that.vel.x / norm, y: that.vel.y / norm };
-      game.bullets.push(new Bullet(that.x, that.y, dir));
+      game.bullets.push(new Bullet(that.x, that.y, dir, game));
     }
 
     that.update = function () {
@@ -95,7 +92,7 @@ var Asteroids = (function () {
 
   Ship.RADIUS = 15;
 
-  function Bullet (startX, startY, dir) {
+  function Bullet (startX, startY, dir, game) {
     var that = this;
 
     that.x = startX;
@@ -104,6 +101,10 @@ var Asteroids = (function () {
     that.update = function () {
       that.x += dir.x * Bullet.SPEED;
       that.y += dir.y * Bullet.SPEED;
+
+      if (outOfBounds(that.x, that.y, Game.DIM_X, Game.DIM_Y)) {
+        game.bullets = _.without(game.bullets, that);
+      }
     }
 
     that.draw = function (ctx) {
