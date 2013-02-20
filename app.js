@@ -226,7 +226,6 @@ var Asteroids = (function () {
   Game.DIM_Y = 600;
 
   return {
-    Asteroid: Asteroid,
     Game: Game
   };
 })();
