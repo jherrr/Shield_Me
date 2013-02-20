@@ -80,7 +80,7 @@ var Asteroids = (function () {
         return;
 
       var dir = { x: that.vel.x / norm, y: that.vel.y / norm };
-      game.bullets.push(new Bullet(that.x, that.y, dir, game));
+      new Bullet(that.x, that.y, dir, game);
     }
 
     that.update = function () {
@@ -129,6 +129,8 @@ var Asteroids = (function () {
       ctx.arc(that.x, that.y, Bullet.RADIUS, 0, 2 * Math.PI, true);
       ctx.fill();
     }
+
+    game.bullets.push(that);
   }
 
   Bullet.RADIUS = 2;
