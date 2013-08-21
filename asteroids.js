@@ -1,85 +1,4 @@
 var Asteroids = (function () {
-  /* **helper functions** */
-  function outOfBounds(x, y, dimX, dimY) {
-    return (x < 0) || (y < 0) || (x > dimX) || (y > dimY);
-  }
-
-  function isCircleCollision(
-    x1, y1, r1,
-    x2, y2, r2) {
-    var dist = Math.sqrt(
-      Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2)
-    );
-
-    return dist < (r1 + r2);
-  }
-
-  /* **Asteroid** */
-  function Asteroid (startX, startY, vel, game) {
-    this.x = startX;
-    this.y = startY;
-    this.vel = vel;
-    this.game = game;
-  }
-
-  Asteroid.prototype.draw = function (ctx) {
-    var that = this;
-
-    ctx.fillStyle = "#000"; // black
-    ctx.beginPath();
-    ctx.arc(that.x, that.y, Asteroid.RADIUS, 0, 2 * Math.PI, true);
-    ctx.fill();
-  };
-
-  Asteroid.prototype.update = function () {
-    var that = this;
-
-    that.x += that.vel.x;
-    that.y += that.vel.y;
-
-    if (outOfBounds(that.x, that.y, Game.DIM_X, Game.DIM_Y)) {
-      // remove asteroid from game array
-      that.game.asteroids = _.without(that.game.asteroids, that);
-    }
-  };
-
-  Asteroid.RADIUS = 25;
-  Asteroid.SPEED = 4;
-  Asteroid.randomAsteroid = function (dimX, dimY, speed, game) {
-    return new Asteroid(
-      dimX * Math.random(),
-      dimY * Math.random(),
-      { x: speed * Math.random(), y: speed * Math.random() },
-      game
-    );
-  };
-
-  /* **Ship** */
-  function Ship (startX, startY, game) {
-    this.x = startX;
-    this.y = startY;
-    this.game = game;
-
-    this.vel = { x: 0, y: 0 };
-  }
-
-  Ship.prototype.draw = function (ctx) {
-    var that = this;
-
-    ctx.fillStyle = "#00F"
-
-    ctx.beginPath();
-    ctx.arc(that.x, that.y, Ship.RADIUS, 0, 2 * Math.PI, true);
-    ctx.fill();
-  };
-
-  Ship.prototype.power = function (dx, dy) {
-    var that = this;
-
-    that.vel.x += dx;
-    that.vel.y += dy;
-  };
-
   Ship.prototype.fireBullet = function () {
     var that = this;
 
@@ -97,25 +16,6 @@ var Asteroids = (function () {
     var dir = { x: that.vel.x / norm, y: that.vel.y / norm };
     new Bullet(that.x, that.y, dir, that.game);
   };
-
-  Ship.prototype.update = function () {
-    var that = this;
-    that.x += that.vel.x;
-    that.y += that.vel.y;
-
-    that.x = Math.max(0, Math.min(Game.DIM_X, that.x));
-    that.y = Math.max(0, Math.min(Game.DIM_Y, that.y));
-  };
-
-  Ship.prototype.isCollided = function (asteroid) {
-    var that = this;
-
-    return isCircleCollision(
-      that.x, that.y, Ship.RADIUS,
-      asteroid.x, asteroid.y, Asteroid.RADIUS);
-  };
-
-  Ship.RADIUS = 15;
 
   /* **Bullet constructor** */
   function Bullet (startX, startY, dir, game) {
@@ -146,16 +46,6 @@ var Asteroids = (function () {
         );
       }
     );
-  };
-
-  Bullet.prototype.draw = function (ctx) {
-    var that = this;
-
-    ctx.fillStyle = "#F00";
-
-    ctx.beginPath();
-    ctx.arc(that.x, that.y, Bullet.RADIUS, 0, 2 * Math.PI, true);
-    ctx.fill();
   };
 
   Bullet.RADIUS = 2;
