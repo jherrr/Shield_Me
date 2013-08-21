@@ -1,12 +1,25 @@
 <html>
   <head>
-    <script src="jquery-1.9.1.js"></script>
-    <script src="underscore.js"></script>
-    <script src="keymaster.js"></script>
-    <script src="asteroids.js"></script>
-    <script src="app.js"></script>
+    <script type="application/javascript" src="jquery-1.9.1.js"></script>
+    <script type="application/javascript" src="keymaster.js"></script>
+
+    <script type="application/javascript" src="lib/inherits.js"></script>
+    <script type="application/javascript" src="lib/moving_object.js"></script>
+    <script type="application/javascript" src="lib/asteroid.js"></script>
+    <script type="application/javascript" src="lib/ship.js"></script>
+    <script type="application/javascript" src="lib/game.js"></script>
   </head>
 
   <body>
+    <script type="application/javascript">
+      $(function () {
+        var canvas = $("<canvas width='" + Asteroids.Game.DIM_X + 
+                       "' height='" + Asteroids.Game.DIM_Y + "'></canvas>");
+        $('body').append(canvas);
+      
+        var ctx = canvas.get(0).getContext("2d");
+        new Asteroids.Game(ctx).start();
+      });
+    </script>
   </body>
 </head>
