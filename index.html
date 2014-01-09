@@ -9,6 +9,7 @@
     <script type="application/javascript" src="lib/ship.js"></script>
     <script type="application/javascript" src="lib/bullet.js"></script>
     <script type="application/javascript" src="lib/game.js"></script>
+    <script type="application/javascript" src="lib/game_view.js"></script>
   </head>
 
   <body>
@@ -17,9 +18,10 @@
         var canvas = $("<canvas width='" + Asteroids.Game.DIM_X + 
                        "' height='" + Asteroids.Game.DIM_Y + "'></canvas>");
         $('body').append(canvas);
-      
+
         var ctx = canvas.get(0).getContext("2d");
-        new Asteroids.Game(ctx).start();
+        var game = new Asteroids.Game(ctx);
+        new Asteroids.GameView(game, ctx).start();
       });
     </script>
   </body>
