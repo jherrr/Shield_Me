@@ -20,7 +20,7 @@
         $('body').append(canvas);
 
         var ctx = canvas.get(0).getContext("2d");
-        var game = new Asteroids.Game();
+        var game = Asteroids.Game.new();
         new Asteroids.GameView(game, ctx).start();
       });
     </script>
