@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Asteroids</title>
+    <title>ShieldME</title>
   </head>
 
   <body>
@@ -22,12 +22,12 @@
     <script type="application/javascript">
       (function () {
         var canvasEl = document.getElementsByTagName("canvas")[0];
-        canvasEl.width = Asteroids.Game.DIM_X;
-        canvasEl.height = Asteroids.Game.DIM_Y;
+        canvasEl.width = ShieldME.Game.DIM_X;
+        canvasEl.height = ShieldME.Game.DIM_Y;
 
         var ctx = canvasEl.getContext("2d");
-        var game = new Asteroids.Game();
-        new Asteroids.GameView(game, ctx).start();
+        var game = new ShieldME.Game();
+        new ShieldME.GameView(game, ctx).start();
       })();
     </script>
   </body>
