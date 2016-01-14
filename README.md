@@ -2,5 +2,5 @@
 
 **[Live Demo][live-demo]**
 
-[live-demo]:
-[description]:
+[live-demo]: http://jherrr.github.io/Shield_Me/
+[description]:hi
