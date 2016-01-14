@@ -1,1 +1,5 @@
 _site
+
+vendor/css
+vendor/fonts
+vendor/js
